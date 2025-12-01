@@ -7,7 +7,7 @@ public class CalculatorModel {
     private double previousValue;   // The first operand
     private String operator;        // The pending operation (+, -, *, /)
     private boolean startNewNumber; // A boolean flag to say if a new number should be started
-
+    private String displayString;
 
     public CalculatorModel() {      // The constructor starts the Model with default variables
         clear();
@@ -18,13 +18,39 @@ public class CalculatorModel {
         previousValue = 0.0;
         operator = "";
         startNewNumber = true;
+        displayString = "0";
     }
 
-    public void processInput(String input) {    // This method handles input of numbers
-        String currentText = String.valueOf(currentValue);
+
+    public String toggleSign() {
+        String currentText = this.displayString;
+
+        // Toggle the sign of the current display string
+        if (currentText.startsWith("-")) {
+            currentText = currentText.substring(1);
+        } else {
+            currentText = "-" + currentText;
+        }
+
+        // Update both state variables
+        this.displayString = currentText;
+        try {
+            this.currentValue = Double.parseDouble(currentText);
+        } catch (NumberFormatException e) {
+            // Handle case where currentText is only "-"
+        }
+
+        // A sign change does NOT change startNewNumber status.
+        // It's just a modification of the number currently being entered.
+
+        return this.displayString;
+    }
+
+    public String processInput(String input) {    // This method handles input of numbers
+        String currentText = this.displayString;
 
         if (startNewNumber) {                   // If a new number is started, like after an operator or clear
-            currentText = input;                // Set the currentText to be the inputted character (. or 0-9)
+            currentText = input.equals(".") ? "0.": input;                // Set the currentText to be the inputted character (. or 0-9)
             startNewNumber = false;             // Switch the flag to start appending characters
         }
         else if (input.equals(".")){            // If a "." is entered, append it if there isn't already a "."
@@ -33,17 +59,29 @@ public class CalculatorModel {
             }
         }
         else {
-            if (currentText.equals("0")){       // If the currentText is 0, overwrite the 0 with the input
-                currentText = input;
-            }
-            else {
-                currentText += input;           // The standard case; append the input digit to the currentText
+            switch (currentText) {
+                case "0" ->        // If the currentText is 0, overwrite the 0 with the input
+                        currentText = input;
+                case "-" -> currentText += input;
+                case "-0" -> currentText = "-" + input;
+                default ->
+                        currentText += input;           // The standard case; append the input digit to the currentText
             }
         }
-        currentValue = Double.parseDouble(currentText);     // Updates the state variable to the full input
+        this.displayString = currentText;
+        try {
+            // Only update the double value if the string is parsable
+            this.currentValue = Double.parseDouble(currentText);
+        } catch (NumberFormatException e) {
+            // Do nothing to currentValue if the string is "2."
+        }
+
+        return this.displayString; // Return the exact string to be displayed
+
     }
 
     public void setOperation(String newOperator){   // Called when an operand is entered ("+, -, *, /)
+
         if (!operator.isEmpty()){   // If there is a pending operator, calculate that result before moving on... Handles the case of a user hitting a new operator without hitting "=" first
             calculateResult();
         }
@@ -79,10 +117,17 @@ public class CalculatorModel {
                 break;
         }
         // Update the state:
-        currentValue = result;  // Updates the state variable to the result to display/ carry over to the next calculateResult call
-        previousValue = 0.0;    // Resets the first operand
-        operator = "";          // Clears the pending operator
-        startNewNumber = true;  // Sets the flag for processInput to start a new number
+        currentValue = result;
+        previousValue = 0.0;
+        operator = "";
+        startNewNumber = true;
+
+        // Set the displayString to the final, clean result
+        if (currentValue == (long) currentValue) {
+            this.displayString = String.format("%d", (long) currentValue);
+        } else {
+            this.displayString = String.valueOf(currentValue);
+        }
     }
 
     public String getCurrentValueString() {     // Gives the sting value of the currentValue

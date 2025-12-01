@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.lermiller.simplecalulator.CalculatorController"
+            spacing="10" alignment="TOP_CENTER">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label fx:id="displayLabel" text="0" alignment="CENTER_RIGHT"
+           maxWidth="200" minHeight="50" style="-fx-border-color: #555; -fx-border-width: 1px; -fx-background-color: #eee;">
+        <font>
+            <Font size="24.0" />
+        </font>
+    </Label>
+
+    <GridPane hgap="10" vgap="10" alignment="CENTER">
+
+        <Button text="C" onAction="#handleClear" maxWidth="Infinity" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <Button text="(-)" onAction="#handleUnaryMinus" maxWidth="Infinity" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+        <Button text="/" onAction="#handleOperator" maxWidth="Infinity" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+
+        <Button text="7" onAction="#handleDigit" maxWidth="Infinity" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <Button text="8" onAction="#handleDigit" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        <Button text="9" onAction="#handleDigit" maxWidth="Infinity" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+        <Button text="*" onAction="#handleOperator" maxWidth="Infinity" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+
+        <Button text="4" onAction="#handleDigit" maxWidth="Infinity" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <Button text="5" onAction="#handleDigit" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        <Button text="6" onAction="#handleDigit" maxWidth="Infinity" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+        <Button text="-" onAction="#handleOperator" maxWidth="Infinity" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+
+        <Button text="1" onAction="#handleDigit" maxWidth="Infinity" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <Button text="2" onAction="#handleDigit" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+        <Button text="3" onAction="#handleDigit" maxWidth="Infinity" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+        <Button text="+" onAction="#handleOperator" maxWidth="Infinity" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
+
+        <Button text="0" onAction="#handleDigit" maxWidth="Infinity" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+        <Button text="." onAction="#handleDigit" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+        <Button text="=" onAction="#handleEquals" maxWidth="Infinity" GridPane.columnIndex="2" GridPane.rowIndex="4" GridPane.columnSpan="2" style="-fx-background-color: #ADD8E6;"/>
+    </GridPane>
+
+</VBox>
